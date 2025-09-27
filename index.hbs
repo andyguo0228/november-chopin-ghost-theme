@@ -1,0 +1,30 @@
+{{!< default}}
+
+<section class="content">
+  <header class="page-header">
+    <h1 class="site-title">{{@site.title}}</h1>
+    {{#if @site.description}}
+      <p class="site-description">{{@site.description}}</p>
+    {{/if}}
+  </header>
+
+  <div class="layout two-col">
+    <aside class="sidebar">
+      <h3>Topics</h3>
+      <ul class="tag-list">
+        {{#get "tags" limit="100" include="count.posts" order="name asc"}}
+          {{#foreach tags}}
+            <li><a href="{{url}}">{{name}} <span class="count">{{count.posts}}</span></a></li>
+          {{/foreach}}
+        {{/get}}
+      </ul>
+    </aside>
+
+    <div class="post-feed">
+      {{#foreach posts}}
+        {{> post-card}}
+      {{/foreach}}
+      {{pagination}}
+    </div>
+  </div>
+</section>

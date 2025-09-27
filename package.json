@@ -1,0 +1,41 @@
+{
+  "name": "oncologyiseasy-ghost",
+  "version": "0.1.0",
+  "description": "A lightweight dark Ghost theme inspired by Oncology is Easy (Just the Docs).",
+  "author": {
+    "name": "Andy Guo",
+    "email": "andy@example.com"
+  },
+  "engines": {
+    "ghost": ">=5.0.0"
+  },
+  "config": {
+    "posts_per_page": 25
+  },
+  "license": "MIT",
+  "keywords": ["ghost", "ghost-theme", "dark", "docs"],
+  "scripts": {
+    "dev": "rollup -c --environment BUILD:development -w",
+    "build": "rollup -c --environment BUILD:production",
+    "zip": "npm run build && bestzip $npm_package_name.zip assets/* partials/* members/* *.hbs package.json",
+    "test": "npx gscan .",
+    "pretest": "npm run build",
+    "sync": "rsync -av --exclude='.git' --exclude='node_modules' --exclude='*.log' ./ ../local-ghost/content/themes/november_chopin/",
+    "dev-sync": "npm run sync && npm run dev"
+  },
+    "devDependencies": {
+        "@babel/core": "^7.21.0",
+        "@babel/preset-env": "^7.20.2",
+        "@rollup/plugin-babel": "^6.0.3",
+        "@rollup/plugin-commonjs": "^25.0.0",
+        "@rollup/plugin-node-resolve": "^15.0.1",
+        "@rollup/plugin-terser": "^0.4.0",
+        "bestzip": "^2.2.1",
+        "postcss": "^8.4.24",
+        "postcss-import": "^15.1.0",
+        "postcss-preset-env": "^8.0.1",
+        "rollup": "^3.18.0",
+        "rollup-plugin-livereload": "^2.0.5",
+        "rollup-plugin-postcss": "^4.0.2"
+    }
+}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{> head}}
+  </head>
+  <body class="{{body_class}}">
+    {{> header}}
+    <main id="site-main" class="container">
+      {{{body}}}
+    </main>
+    {{> footer}}
+    <script src="{{asset "js/site.js"}}"></script>
+    {{ghost_foot}}
+  </body>
+  </html>

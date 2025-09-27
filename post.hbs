@@ -1,0 +1,28 @@
+{{!< default}}
+
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{title}}</h1>
+    <div class="post-byline">
+      {{#primary_author}}
+        <a class="author" href="{{url}}">{{name}}</a>
+      {{/primary_author}}
+      <span class="date">{{date format="YYYY-MM-DD"}}</span>
+    </div>
+    {{#if tags}}
+      <ul class="tag-list compact">
+        {{#foreach tags}}
+          <li><a href="{{url}}">#{{name}}</a></li>
+        {{/foreach}}
+      </ul>
+    {{/if}}
+  </header>
+
+  <section class="post-content">
+    {{content}}
+  </section>
+
+  <footer class="post-footer">
+    {{> post-nav}}
+  </footer>
+</article>

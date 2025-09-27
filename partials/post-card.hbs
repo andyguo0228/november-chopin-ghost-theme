@@ -1,0 +1,17 @@
+<article class="post-card">
+  <h2 class="post-card-title"><a href="{{url}}">{{title}}</a></h2>
+  {{#if excerpt}}
+    <p class="post-card-excerpt">{{excerpt}}</p>
+  {{/if}}
+  <div class="post-card-meta">
+    <span class="date">{{date format="YYYY-MM-DD"}}</span>
+    {{#if tags}}
+      <span class="sep">•</span>
+      <ul class="tag-list inline">
+        {{#foreach tags visibility="public"}}
+          <li><a href="{{url}}">#{{name}}</a></li>
+        {{/foreach}}
+      </ul>
+    {{/if}}
+  </div>
+</article>
