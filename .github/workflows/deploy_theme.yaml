@@ -1,0 +1,93 @@
+# .github/workflows/deploy-theme.yml
+name: Deploy Ghost Theme
+
+on:
+  push:
+    branches: [ main, master ]
+    # Only redeploy when theme files change (optional but faster)
+    paths:
+      - "**/*.hbs"
+      - "assets/**"
+      - "partials/**"
+      - "locales/**"
+      - "package.json"
+      - "package-lock.json"
+      - "yarn.lock"
+      - "pnpm-lock.yaml"
+      - "tailwind.config.*"
+      - "postcss.config.*"
+      - "gulpfile.*"
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Optional: node toolchain + dependency cache for themes that build assets
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          # If your theme expects Node 20 or 22, set it here
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install deps (if lockfile exists)
+        shell: bash
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          elif [ -f yarn.lock ]; then
+            corepack enable
+            corepack prepare yarn@stable --activate
+            yarn install --frozen-lockfile
+          elif [ -f pnpm-lock.yaml ]; then
+            corepack enable
+            corepack prepare pnpm@latest --activate
+            pnpm install --frozen-lockfile
+          else
+            echo "No lockfile found. Skipping install."
+          fi
+
+      - name: Build assets (if script exists)
+        shell: bash
+        run: |
+          if npm run | grep -qE '^  build'; then
+            npm run build
+          elif command -v yarn >/dev/null 2>&1 && yarn run | grep -qE '^  build'; then
+            yarn build
+          elif command -v pnpm >/dev/null 2>&1 && pnpm run | grep -qE '^  build'; then
+            pnpm build
+          else
+            echo "No build script found. Skipping build."
+          fi
+
+      # EITHER let the action create the zip, or hand it a prebuilt zip.
+      # Here we let the action zip, and we exclude junk for faster uploads.
+      - name: Deploy Ghost Theme
+        uses: TryGhost/action-deploy-theme@v1
+        with:
+          api-url: ${{ secrets.GHOST_ADMIN_API_URL }}
+          api-key: ${{ secrets.GHOST_ADMIN_API_KEY }}
+          # Reduce payload size & avoid validator whining:
+          exclude: |
+            node_modules/*
+            *.map
+            .git/*
+            .github/*
+            .husky/*
+            .DS_Store
+            **/*.test.*
+            src/*
+            README.md
+          # If your theme lives in a subfolder, uncomment:
+          # working-directory: packages/my-theme
+          #
+          # If you prebuild a zip, use:
+          # file: dist/your-theme.zip
+          #
+          # If you want to rename the installed theme (overrides package.json "name"):
+          # theme-name: my-ghost-theme
