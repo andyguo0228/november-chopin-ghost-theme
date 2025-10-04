@@ -1,7 +1,7 @@
 <article class="post-card">
   <h2 class="post-card-title"><a href="{{url}}">{{title}}</a></h2>
-  {{#if excerpt}}
-    <p class="post-card-excerpt">{{excerpt}}</p>
+  {{#if html}}
+    <div class="post-card-content">{{{html}}}</div>
   {{/if}}
   <div class="post-card-meta">
     <span class="date">{{date format="YYYY-MM-DD"}}</span>

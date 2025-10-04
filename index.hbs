@@ -10,6 +10,9 @@
 
   <div class="layout two-col">
     <aside class="sidebar">
+      <h3>About</h3>
+      <p id="about-me">I'm Andy and this is my personal blog where I complain about how hard my life is.</p>
+      <br>
       <h3>Topics</h3>
       <ul class="tag-list">
         {{#get "tags" limit="100" include="count.posts" order="name asc"}}
@@ -21,9 +24,11 @@
     </aside>
 
     <div class="post-feed">
-      {{#foreach posts}}
-        {{> post-card}}
-      {{/foreach}}
+      {{#get "posts" include="tags,authors"}}
+        {{#foreach posts}}
+          {{> post-card}}
+        {{/foreach}}
+      {{/get}}
       {{pagination}}
     </div>
   </div>

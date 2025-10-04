@@ -112,6 +112,12 @@ a:hover {
     letter-spacing: .04em
 }
 
+#about-me {
+    margin: 0 8px 12px;
+    font-size: .95rem;
+    line-height: 1.4
+}
+
 .tag-list {
     list-style: none;
     margin: 0;
